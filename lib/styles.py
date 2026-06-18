@@ -1,9 +1,9 @@
 """
 CSS injection. Imports Google Fonts and overrides Streamlit's defaults so the
-dashboard reads as a continuation of the Khabar playbook aesthetic, not a
-generic Streamlit app.
+dashboard reads as a clean, minimal analytics workspace — restrained colour,
+hairline borders, generous whitespace, in the spirit of Adobe Analytics.
 
-Design source: /mnt/project/khabar_intelligence_playbook.html
+Design source: white-minimalist restyle, June 2026.
 """
 import streamlit as st
 
@@ -11,27 +11,37 @@ import streamlit as st
 CSS = """
 <style>
 /* ---- Google Fonts ------------------------------------------- */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Barlow:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
-/* ---- Khabar tokens ------------------------------------------- */
+/* ---- Khabar tokens (white minimalist) ------------------------ */
 :root {
-  --void:     #080a0f;
-  --deep:     #0d1117;
-  --surface:  #13191f;
-  --surface2: #1a2230;
-  --border:   rgba(255, 255, 255, 0.07);
-  --bright:   rgba(255, 255, 255, 0.14);
-  --ink:      #e8e2d5;
-  --muted:    #6b7585;
-  --gold:     #d4a843;
-  --amber:    #c87533;
-  --red:      #c03a2b;
-  --blue:     #2d7fc1;
-  --green:    #2d9e6b;
-  --purple:   #7c5cbf;
+  --canvas:     #FFFFFF;
+  --surface:    #FAFAFA;
+  --surface2:   #F2F2F2;
+  --border:     #E1E1E1;
+  --bright:     #C8C8C8;
+  --ink:        #2C2C2C;
+  --muted:      #6E6E6E;
+  --accent:     #1473E6;
+  --accent-soft:#E8F2FD;
+  --accent-dim: #0D5BB8;
+  --positive:   #2D9D78;
+  --negative:   #D7373F;
+  --warning:    #C9A227;
 
-  --serif: 'Playfair Display', Georgia, serif;
-  --sans:  'Barlow', sans-serif;
+  /* legacy aliases kept so existing view files (which reference
+     var(--gold) etc.) resolve to sane values without a full rewrite */
+  --gold:    var(--accent);
+  --amber:   var(--warning);
+  --red:     var(--negative);
+  --blue:    var(--accent);
+  --green:   var(--positive);
+  --purple:  #6B5CA5;
+  --void:    var(--canvas);
+  --deep:    var(--surface);
+
+  --serif: 'Inter', -apple-system, sans-serif; /* serif retired; alias kept for old refs */
+  --sans:  'Inter', -apple-system, sans-serif;
   --mono:  'JetBrains Mono', monospace;
 }
 
@@ -41,47 +51,52 @@ footer                  { visibility: hidden; }
 .stDeployButton         { display: none; }
 header[data-testid="stHeader"] { background: transparent; }
 
-/* ---- Base typography ---------------------------------------- */
+/* ---- Base typography ------------------------------------------ */
 html, body, [class*="css"] {
   font-family: var(--sans);
-  font-weight: 300;
+  font-weight: 400;
   color: var(--ink);
-  background: var(--void);
+  background: var(--canvas);
+}
+
+[data-testid="stAppViewContainer"], [data-testid="stMain"] {
+  background: var(--canvas);
 }
 
 h1, h2, h3 {
-  font-family: var(--serif);
-  font-weight: 700;
-  letter-spacing: -0.5px;
+  font-family: var(--sans);
+  font-weight: 600;
+  letter-spacing: -0.2px;
   color: var(--ink);
 }
 
-h1 { font-size: 2.4rem; line-height: 1.05; }
-h2 { font-size: 1.7rem; line-height: 1.15; margin-top: 1.5rem; }
-h3 { font-size: 1.2rem; line-height: 1.2; }
+h1 { font-size: 1.9rem; line-height: 1.15; }
+h2 { font-size: 1.3rem; line-height: 1.2; margin-top: 1.5rem; }
+h3 { font-size: 1.05rem; line-height: 1.25; }
 
 p, li {
   font-family: var(--sans);
-  font-size: 0.95rem;
-  line-height: 1.65;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--ink);
 }
 
 code, pre, .mono {
   font-family: var(--mono) !important;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
 }
 
-/* ---- Eyebrows ------------------------------------------------ */
+/* ---- Eyebrows (small uppercase tracked labels) --------------- */
 .eyebrow {
   font-family: var(--mono);
   font-size: 0.65rem;
-  letter-spacing: 4px;
+  letter-spacing: 2.5px;
   text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 0.75rem;
+  color: var(--muted);
+  margin-bottom: 0.6rem;
 }
 
-/* ---- Login page --------------------------------------------- */
+/* ---- Login page ----------------------------------------------- */
 .login-container {
   max-width: 360px;
   margin: 6rem auto 1.5rem auto;
@@ -90,14 +105,15 @@ code, pre, .mono {
 .login-eyebrow {
   font-family: var(--mono);
   font-size: 0.65rem;
-  letter-spacing: 4px;
-  color: var(--gold);
+  letter-spacing: 2.5px;
+  color: var(--accent);
   margin-bottom: 1.5rem;
 }
 .login-title {
-  font-family: var(--serif);
-  font-size: 2.5rem;
-  font-weight: 900;
+  font-family: var(--sans);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--ink);
   margin-bottom: 0.5rem;
 }
 .login-sub {
@@ -108,49 +124,57 @@ code, pre, .mono {
 .stForm {
   max-width: 360px;
   margin: 0 auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 1.5rem;
 }
 
-/* ---- Today's Read callout (every tab uses this) ------------ */
+/* ---- Today's Read callout (every tab uses this) -------------- */
 .todays-read {
   background: var(--surface);
-  border-left: 3px solid var(--gold);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
   padding: 1.25rem 1.5rem;
   margin: 1.5rem 0;
 }
 .todays-read-label {
   font-family: var(--mono);
   font-size: 0.65rem;
-  letter-spacing: 3px;
-  color: var(--gold);
+  letter-spacing: 2.5px;
+  color: var(--accent);
   margin-bottom: 0.5rem;
+  text-transform: uppercase;
 }
 .todays-read-body {
   font-family: var(--sans);
-  font-size: 1.05rem;
-  line-height: 1.7;
+  font-size: 1rem;
+  line-height: 1.65;
   color: var(--ink);
 }
 
-/* ---- Why this matters (fixed paragraph at top of every tab) */
+/* ---- Why this matters (fixed paragraph at top of every tab) -- */
 .why-matters {
   color: var(--muted);
-  font-style: italic;
-  font-size: 0.92rem;
-  line-height: 1.7;
+  font-style: normal;
+  font-size: 0.9rem;
+  line-height: 1.6;
   margin: 0.5rem 0 1.5rem 0;
   padding-bottom: 1rem;
   border-bottom: 1px solid var(--border);
 }
 
-/* ---- Anomaly cards (home page feed) ------------------------ */
+/* ---- Anomaly cards (home page feed) --------------------------- */
 .anomaly-card {
-  background: var(--deep);
+  background: var(--canvas);
   border: 1px solid var(--border);
   padding: 1.5rem;
   margin-bottom: 1rem;
-  transition: border-color 0.15s;
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
-.anomaly-card:hover { border-color: var(--bright); }
+.anomaly-card:hover {
+  border-color: var(--bright);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
 .anomaly-card-header {
   display: flex;
   align-items: center;
@@ -162,15 +186,17 @@ code, pre, .mono {
 }
 .anomaly-category {
   font-family: var(--mono);
-  font-size: 0.65rem;
-  letter-spacing: 2px;
+  font-size: 0.62rem;
+  letter-spacing: 1.5px;
   padding: 2px 8px;
   border: 1px solid var(--border);
+  text-transform: uppercase;
+  background: var(--surface);
 }
-.anomaly-category.price       { color: var(--gold);   border-color: rgba(212,168,67,0.3); }
-.anomaly-category.inventory   { color: var(--green);  border-color: rgba(45,158,107,0.3); }
-.anomaly-category.lifecycle   { color: var(--blue);   border-color: rgba(45,127,193,0.3); }
-.anomaly-category.competitive { color: var(--red);    border-color: rgba(192,58,43,0.3); }
+.anomaly-category.price       { color: var(--accent-dim); border-color: var(--accent-soft); background: var(--accent-soft); }
+.anomaly-category.inventory   { color: #1F7A5C; border-color: #D7EFE5; background: #F1FAF6; }
+.anomaly-category.lifecycle   { color: var(--accent-dim); border-color: var(--accent-soft); background: var(--accent-soft); }
+.anomaly-category.competitive { color: #B23036; border-color: #FBE2E3; background: #FDF3F3; }
 .anomaly-time {
   margin-left: auto;
   font-family: var(--mono);
@@ -178,40 +204,41 @@ code, pre, .mono {
   color: var(--muted);
 }
 .anomaly-title {
-  font-family: var(--serif);
-  font-size: 1.1rem;
-  font-weight: 700;
+  font-family: var(--sans);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--ink);
   margin-bottom: 0.3rem;
 }
 .anomaly-body {
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   color: var(--ink);
   line-height: 1.55;
 }
 .anomaly-meta {
   margin-top: 0.6rem;
   font-family: var(--mono);
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   color: var(--muted);
   letter-spacing: 0.5px;
 }
 
-/* ---- Empty state -------------------------------------------- */
+/* ---- Empty state ------------------------------------------------ */
 .empty-state {
   text-align: center;
   padding: 4rem 1rem;
   color: var(--muted);
-  font-style: italic;
+  font-style: normal;
 }
 
-/* ---- Tab navigation styling --------------------------------- */
+/* ---- Tab navigation styling -------------------------------------- */
 .stTabs [data-baseweb="tab-list"] {
-  gap: 1.5rem;
+  gap: 1.75rem;
   border-bottom: 1px solid var(--border);
 }
 .stTabs [data-baseweb="tab"] {
   font-family: var(--mono);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   letter-spacing: 1px;
   text-transform: uppercase;
   color: var(--muted);
@@ -219,64 +246,73 @@ code, pre, .mono {
   padding: 0.6rem 0;
 }
 .stTabs [aria-selected="true"] {
-  color: var(--gold) !important;
+  color: var(--accent) !important;
+}
+.stTabs [data-baseweb="tab-highlight"] {
+  background-color: var(--accent) !important;
 }
 
-/* ---- Sidebar ------------------------------------------------ */
+/* ---- Sidebar ------------------------------------------------------ */
 [data-testid="stSidebar"] {
-  background: var(--deep);
+  background: var(--surface);
   border-right: 1px solid var(--border);
 }
 [data-testid="stSidebar"] .stMarkdown h2 {
   font-family: var(--mono);
-  font-size: 0.65rem;
-  letter-spacing: 3px;
+  font-size: 0.62rem;
+  letter-spacing: 2px;
   color: var(--muted);
   text-transform: uppercase;
   font-weight: 400;
   margin-top: 1.5rem;
 }
 
-/* ---- Buttons (login + actions) ------------------------------ */
+/* ---- Buttons (login + actions) ------------------------------------ */
 .stButton button, .stFormSubmitButton button {
-  background: var(--gold);
-  color: var(--void);
+  background: var(--accent);
+  color: #FFFFFF;
   border: none;
-  font-family: var(--mono);
-  font-size: 0.75rem;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  padding: 0.6rem 1.2rem;
+  border-radius: 3px;
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  letter-spacing: 0.2px;
+  text-transform: none;
+  padding: 0.55rem 1.3rem;
   font-weight: 500;
 }
 .stButton button:hover, .stFormSubmitButton button:hover {
-  background: #e8bc54;
-  color: var(--void);
+  background: var(--accent-dim);
+  color: #FFFFFF;
 }
 
-/* ---- Input fields ------------------------------------------- */
+/* ---- Input fields --------------------------------------------------- */
 input, .stTextInput input {
-  background: var(--surface) !important;
+  background: #FFFFFF !important;
   border: 1px solid var(--border) !important;
   color: var(--ink) !important;
   font-family: var(--sans);
+  border-radius: 3px;
+}
+input:focus, .stTextInput input:focus {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 1px var(--accent-soft) !important;
 }
 
-/* ---- Brand wordmark in sidebar ------------------------------ */
+/* ---- Brand wordmark in sidebar --------------------------------------- */
 .brand-mark {
-  font-family: var(--serif);
-  font-size: 1.6rem;
-  font-weight: 900;
-  color: var(--gold);
-  letter-spacing: -0.5px;
+  font-family: var(--sans);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.3px;
   padding: 0.5rem 0 1rem 0;
   border-bottom: 1px solid var(--border);
   margin-bottom: 1rem;
 }
 .brand-tagline {
   font-family: var(--mono);
-  font-size: 0.6rem;
-  letter-spacing: 3px;
+  font-size: 0.58rem;
+  letter-spacing: 2px;
   color: var(--muted);
   text-transform: uppercase;
   margin-top: -1.4rem;
@@ -285,14 +321,14 @@ input, .stTextInput input {
   border-bottom: 1px solid var(--border);
 }
 
-/* ---- "Coming soon" stub blocks ------------------------------ */
+/* ---- "Coming soon" stub blocks ----------------------------------------- */
 .stub-block {
   background: var(--surface);
   border: 1px dashed var(--border);
   padding: 2rem;
   text-align: center;
   color: var(--muted);
-  font-style: italic;
+  font-style: normal;
   margin: 1rem 0;
 }
 </style>
