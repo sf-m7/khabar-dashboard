@@ -21,9 +21,19 @@ section_header(
 
 user = current_user()
 
-st.markdown(f"**Signed in as:** {user.get('username','')} "
-            f"({user.get('company','') or 'no company set'})")
-st.markdown(f"**Subscription tier:** `{user.get('tier','basic')}`")
+st.markdown(
+    f"<div style='background:var(--surface);border:1px solid var(--border);"
+    f"padding:1.25rem 1.5rem;margin-bottom:1.5rem;'>"
+    f"  <div style='font-family:var(--mono);font-size:0.62rem;letter-spacing:2px;"
+    f"        color:var(--muted);text-transform:uppercase;margin-bottom:0.4rem;'>Signed in as</div>"
+    f"  <div style='font-size:1.1rem;font-weight:600;color:var(--ink);'>{user.get('username','')}</div>"
+    f"  <div style='font-size:0.85rem;color:var(--muted);margin-top:0.2rem;'>"
+    f"    {user.get('company','') or 'No company set'} &middot; "
+    f"    <span style='color:var(--accent);font-weight:500;'>{user.get('tier','basic')}</span> tier"
+    f"  </div>"
+    f"</div>",
+    unsafe_allow_html=True,
+)
 
 st.markdown("<h2 style='margin-top: 2rem;'>Preferences</h2>", unsafe_allow_html=True)
 
