@@ -20,11 +20,11 @@ from lib.inventory_queries import (
 
 
 # ─── Design tokens (kept in sync with lib/styles.py) ────────────────
-GOLD       = "#d4a843"
-GOLD_DIM   = "#7a6228"
-MUTED      = "#3a4452"
-INK        = "#e8e2d5"
-INK_MUTED  = "#6b7585"
+GOLD       = "#1473E6"   # primary accent (named GOLD for back-compat with call sites)
+GOLD_DIM   = "#0D5BB8"
+MUTED      = "#E1E1E1"
+INK        = "#2C2C2C"
+INK_MUTED  = "#6E6E6E"
 
 
 BRAND_DISPLAY = {
@@ -45,7 +45,7 @@ def stat_tile(label: str, value, hint: str = ""):
         f"        color:var(--muted);text-transform:uppercase;margin-bottom:0.5rem;'>"
         f"    {escape(label)}"
         f"  </div>"
-        f"  <div style='font-family:var(--serif);font-size:2rem;font-weight:900;"
+        f"  <div style='font-family:var(--sans);font-size:2rem;font-weight:700;"
         f"        color:var(--ink);line-height:1;'>"
         f"    {escape(str(value))}"
         f"  </div>"
@@ -87,7 +87,7 @@ def render_hbars(rows, label_key, value_key, value_format="{:,.0f}",
             left_pct = min(99, (t_val / max_val) * 100)
             threshold_html += (
                 f"<div style='position:absolute;left:{left_pct:.1f}%;top:-4px;"
-                f"bottom:-4px;width:1px;border-left:1px dashed rgba(255,255,255,0.18);"
+                f"bottom:-4px;width:1px;border-left:1px dashed rgba(44,44,44,0.35);"
                 f"pointer-events:none;'></div>"
             )
 
@@ -109,7 +109,7 @@ def render_hbars(rows, label_key, value_key, value_format="{:,.0f}",
 
             # Bar track + fill (+ threshold overlay)
             f"<div style='position:relative;height:26px;"
-            f"background:rgba(255,255,255,0.025);"
+            f"background:var(--surface2);"
             f"border-left:1px solid var(--border);'>"
             f"  <div style='position:absolute;left:0;top:0;bottom:0;"
             f"       width:{width:.1f}%;background:{color};'></div>"
