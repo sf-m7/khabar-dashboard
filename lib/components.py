@@ -8,19 +8,28 @@ from html import escape
 
 
 def section_header(eyebrow: str, title: str, intro: str = ""):
-    """Top of every section page / view. Eyebrow + serif title + optional intro."""
+    """Top of every section page / view. Eyebrow + title + optional intro."""
     st.markdown(f"<div class='eyebrow'>{escape(eyebrow)}</div>", unsafe_allow_html=True)
-    st.markdown(f"<h1>{escape(title)}</h1>", unsafe_allow_html=True)
+    st.markdown(f"<h1 style='margin-top:0.1rem;'>{escape(title)}</h1>", unsafe_allow_html=True)
     if intro:
-        st.markdown(f"<p style='color:var(--muted);max-width:680px;'>{escape(intro)}</p>",
+        st.markdown(f"<p style='color:var(--muted);max-width:680px;margin-top:0.4rem;'>{escape(intro)}</p>",
                     unsafe_allow_html=True)
-    st.markdown("<div style='margin: 1.5rem 0; border-bottom: 1px solid var(--border);'></div>",
+    st.markdown("<div style='margin: 1rem 0; border-bottom: 1px solid var(--border);'></div>",
                 unsafe_allow_html=True)
 
 
 def why_matters(text: str):
-    """The fixed 'why this matters' paragraph at the top of every tab."""
-    st.markdown(f"<div class='why-matters'>{escape(text)}</div>", unsafe_allow_html=True)
+    """The fixed 'why this matters' paragraph at the top of every tab.
+    Supports a simple **bold** marker (escaped first, then converted to
+    <strong>) so the lead question can be visually emphasized."""
+    safe = escape(text)
+    # Convert **bold** markers to <strong> after escaping, so this stays
+    # safe against HTML injection while still allowing simple emphasis.
+    parts = safe.split("**")
+    rebuilt = ""
+    for i, part in enumerate(parts):
+        rebuilt += f"<strong>{part}</strong>" if i % 2 == 1 else part
+    st.markdown(f"<div class='why-matters'>{rebuilt}</div>", unsafe_allow_html=True)
 
 
 def todays_read(text: str):
@@ -102,9 +111,29 @@ def stub_block(message: str):
 
 
 def brand_header_in_sidebar():
-    """The KHABAR wordmark + tagline at the top of the sidebar."""
+    """The KHABAR wordmark lockup at the top of the sidebar.
+    Bold heavy KHABAR with 'Intelligence' nested beneath it in a smaller,
+    lighter weight — a single lockup, not two separate text blocks."""
     st.markdown(
-        "<div class='brand-mark'>KHABAR</div>"
-        "<div class='brand-tagline'>Intelligence \u00b7 Egypt</div>",
+        "<div class='brand-lockup'>"
+        "  <div class='brand-mark'>KHABAR</div>"
+        "  <div class='brand-sub'>Intelligence</div>"
+        "</div>",
+        unsafe_allow_html=True,
+    )
+
+
+def account_footer_in_sidebar(tier: str):
+    """Single unified container at the bottom of the sidebar: the brand
+    lockup repeated small + the subscription tier. No username here —
+    that lives in Settings only."""
+    st.markdown(
+        "<div class='sidebar-footer'>"
+        "  <div class='sidebar-footer-brand'>"
+        "    <span class='sidebar-footer-khabar'>KHABAR</span>"
+        "    <span class='sidebar-footer-intel'>Intelligence</span>"
+        "  </div>"
+        f"  <div class='sidebar-footer-tier'>{escape(tier or 'basic')} tier</div>"
+        "</div>",
         unsafe_allow_html=True,
     )
