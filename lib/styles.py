@@ -154,13 +154,17 @@ code, pre, .mono {
 
 /* ---- Why this matters (fixed paragraph at top of every tab) -- */
 .why-matters {
-  color: var(--muted);
+  color: var(--ink);
   font-style: normal;
-  font-size: 0.9rem;
-  line-height: 1.6;
-  margin: 0.5rem 0 1.5rem 0;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  margin: 0.75rem 0 1.5rem 0;
   padding-bottom: 1rem;
   border-bottom: 1px solid var(--border);
+}
+.why-matters strong {
+  color: var(--ink);
+  font-weight: 600;
 }
 
 /* ---- Anomaly cards (home page feed) --------------------------- */
@@ -309,18 +313,6 @@ input:focus, .stTextInput input:focus {
   border-bottom: 1px solid var(--border);
   margin-bottom: 1rem;
 }
-.brand-tagline {
-  font-family: var(--mono);
-  font-size: 0.58rem;
-  letter-spacing: 2px;
-  color: var(--muted);
-  text-transform: uppercase;
-  margin-top: -1.4rem;
-  margin-bottom: 1rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid var(--border);
-}
-
 /* ---- "Coming soon" stub blocks ----------------------------------------- */
 .stub-block {
   background: var(--surface);
@@ -331,6 +323,103 @@ input:focus, .stTextInput input:focus {
   font-style: normal;
   margin: 1rem 0;
 }
+
+/* ---- Brand lockup (sidebar top): bold KHABAR, smaller Intelligence
+   nested beneath it as one cohesive wordmark, not two separate lines -- */
+.brand-lockup {
+  padding: 0.4rem 0 1rem 0;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.brand-lockup .brand-mark {
+  font-family: var(--sans);
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.3px;
+  line-height: 1.1;
+  border-bottom: none;
+  padding: 0;
+  margin: 0;
+}
+.brand-lockup .brand-sub {
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--muted);
+  letter-spacing: 0.2px;
+  margin-top: -0.1rem;
+}
+
+/* ---- Unified sidebar footer: one container, brand (small) + tier only,
+   no username (username lives in Settings only) ---------------------- */
+.sidebar-footer {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+.sidebar-footer-brand {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  margin-bottom: 0.3rem;
+}
+.sidebar-footer-khabar {
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.1px;
+}
+.sidebar-footer-intel {
+  font-family: var(--sans);
+  font-size: 0.68rem;
+  font-weight: 400;
+  color: var(--muted);
+}
+.sidebar-footer-tier {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* ---- Sidebar nav: more prominent icons -------------------------------- */
+[data-testid="stSidebar"] [data-testid="stIconMaterial"] {
+  font-size: 1.3rem !important;
+}
+[data-testid="stSidebar"] [data-testid="stSidebarNav"] a {
+  padding-top: 0.55rem !important;
+  padding-bottom: 0.55rem !important;
+}
+
+/* ---- Filter strip (Adobe Analytics pattern): filters sit on a visually
+   distinct surface, separated from the chart canvas they control ------- */
+.filter-strip {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.85rem 1.1rem 0.3rem 1.1rem;
+  margin: 0.75rem 0 1.25rem 0;
+}
+.filter-strip-label {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.4rem;
+}
+.filter-strip [data-testid="stSelectbox"] label,
+.filter-strip [data-testid="stSlider"] label {
+  font-size: 0.75rem !important;
+  color: var(--muted) !important;
+}
+
+/* ---- Tighter top-of-page spacing (denser, less mobile-stacked) ------- */
+h1 + p, h1 + div p { margin-top: 0.3rem; }
+.eyebrow + h1 { margin-top: 0.1rem; }
 </style>
 """
 
