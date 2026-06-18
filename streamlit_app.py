@@ -11,7 +11,7 @@ import streamlit as st
 
 from lib.styles import inject_global_styles
 from lib.auth import require_login, current_user
-from lib.components import brand_header_in_sidebar
+from lib.components import brand_header_in_sidebar, account_footer_in_sidebar
 
 
 # ─── Page config ────────────────────────────────────────────────
@@ -29,9 +29,36 @@ inject_global_styles()
 # ─── Auth gate ──────────────────────────────────────────────────
 require_login()  # Stops here and renders the login form if not authenticated
 
-# ─── Sidebar brand mark ─────────────────────────────────────────
+# ─── Sidebar collapse toggle ─────────────────────────────────────
+# CSS-only collapse: toggling a session flag adds/removes a class on the
+# app wrapper. No hover-JS, no dependency on Streamlit DOM internals that
+# could break on a version bump — just a class swap driven by a button.
+if "sidebar_collapsed" not in st.session_state:
+    st.session_state["sidebar_collapsed"] = False
+
 with st.sidebar:
     brand_header_in_sidebar()
+    toggle_label = "\u00bb expand" if st.session_state["sidebar_collapsed"] else "\u00ab collapse"
+    if st.button(toggle_label, key="sidebar_toggle", use_container_width=True):
+        st.session_state["sidebar_collapsed"] = not st.session_state["sidebar_collapsed"]
+        st.rerun()
+
+if st.session_state["sidebar_collapsed"]:
+    st.markdown("<div class='collapsed-marker'></div>", unsafe_allow_html=True)
+    st.markdown(
+        "<style>"
+        "[data-testid='stSidebar'] { width: 72px !important; min-width: 72px !important; }"
+        "[data-testid='stSidebar'] [data-testid='stSidebarNav'] span:not(.material-symbols-outlined) { display: none !important; }"
+        "[data-testid='stSidebar'] .brand-lockup { display: none !important; }"
+        "[data-testid='stSidebar'] .sidebar-footer-intel, "
+        "[data-testid='stSidebar'] .sidebar-footer-khabar, "
+        "[data-testid='stSidebar'] .sidebar-footer-tier { display: none !important; }"
+        "[data-testid='stSidebar'] [data-testid='stSidebarNav'] [data-testid='stIconMaterial'] "
+        "{ font-size: 1.6rem !important; }"
+        "[data-testid='stSidebar'] button[kind='secondary'] p { font-size: 0.7rem !important; }"
+        "</style>",
+        unsafe_allow_html=True,
+    )
 
 # ─── Navigation ─────────────────────────────────────────────────
 user = current_user()
@@ -56,19 +83,10 @@ pages = {
 
 pg = st.navigation(pages, position="sidebar")
 
-# ─── Sidebar footer (signed-in user) ────────────────────────────
+# ─── Sidebar footer — one unified container, brand + tier only ──
+# Username is intentionally NOT shown here; it lives in Settings.
 with st.sidebar:
-    st.markdown(
-        f"<div style='position: fixed; bottom: 1.5rem; left: 1rem; right: 1rem; "
-        f"font-family: \"JetBrains Mono\", monospace; font-size: 0.65rem; "
-        f"color: var(--muted); letter-spacing: 1px; "
-        f"border-top: 1px solid var(--border); padding-top: 1rem;'>"
-        f"Signed in<br>"
-        f"<span style='color: var(--ink);'>{user.get('username','')}</span><br>"
-        f"<span style='font-size: 0.6rem;'>tier: {user.get('tier','basic')}</span>"
-        f"</div>",
-        unsafe_allow_html=True,
-    )
+    account_footer_in_sidebar(user.get("tier", "basic"))
 
 # ─── Run the chosen page ────────────────────────────────────────
 pg.run()
