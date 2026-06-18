@@ -162,9 +162,9 @@ section_header(
 )
 
 tab1, tab2, tab3 = st.tabs([
-    "Where is the market under-supplying?",
-    "What's stuck and not selling?",
-    "Which sizes are quietly being abandoned?",
+    "Undersupply",
+    "Dead Stock",
+    "Abandoned Sizes",
 ])
 
 
@@ -173,18 +173,26 @@ tab1, tab2, tab3 = st.tabs([
 # ────────────────────────────────────────────────────────────────────
 with tab1:
     why_matters(
-        "Sizes that stock out fast while others sit untouched reveal what the "
-        "market actually wants \u2014 vs what brands chose to produce. The same "
-        "pattern showing up across multiple brands isn't a one-brand mistake; "
-        "it's a market-wide manufacturing blind spot you can exploit either by "
-        "stocking those sizes early, securing them from suppliers, or pricing "
-        "them above the category median."
+        "**Where is the market under-supplying?** Sizes that stock out fast "
+        "while others sit untouched reveal what the market actually wants "
+        "\u2014 vs what brands chose to produce. The same pattern showing up "
+        "across multiple brands isn't a one-brand mistake; it's a "
+        "market-wide manufacturing blind spot you can exploit either by "
+        "stocking those sizes early, securing them from suppliers, or "
+        "pricing them above the category median."
     )
 
-    # Filters
+    # Filters — rendered inside a visually distinct strip, separated from
+    # the canvas below it (Adobe Analytics pattern: filters sit on a
+    # different surface than the charts they control).
     user        = current_user()
     user_gender = (user.get("gender_focus") or "").lower() or None
 
+    st.markdown("<div class='filter-strip'>", unsafe_allow_html=True)
+    st.markdown(
+        "<div class='filter-strip-label'>Filters</div>",
+        unsafe_allow_html=True,
+    )
     fcol1, fcol2, fcol3 = st.columns([1, 1, 2])
     with fcol1:
         days = st.select_slider("Time window",
@@ -201,6 +209,7 @@ with tab1:
             "Category",
             options=["All categories"] + sorted(CATEGORY_DISPLAY.keys()),
         )
+    st.markdown("</div>", unsafe_allow_html=True)
 
     gender_filter   = None if gender_choice == "All"              else gender_choice
     category_filter = None if category_choice == "All categories" else category_choice
@@ -215,7 +224,7 @@ with tab1:
                                   category=category_filter, limit=10)
 
     # Stat tiles
-    st.markdown("<div style='margin-top: 1.25rem;'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='margin-top: 1rem;'></div>", unsafe_allow_html=True)
 
     total_stockouts   = sum(r["stockout_count"] for r in matrix_rows) if matrix_rows else 0
     n_categories      = len(set((r["category"], r["gender"]) for r in matrix_rows)) if matrix_rows else 0
@@ -235,7 +244,7 @@ with tab1:
 
     # ─── Chart 1: Where demand is concentrating ────────────────────
     st.markdown(
-        "<div style='margin-top: 2.5rem;'>"
+        "<div style='margin-top: 1.75rem;'>"
         "<div class='eyebrow'>Where demand is concentrating</div>"
         "<h3 style='margin: 0.3rem 0 0 0;'>Sizes ranked by stockout count</h3>"
         "<p style='color: var(--muted); margin: 0.4rem 0 1rem 0; font-size: 0.85rem;'>"
@@ -266,7 +275,7 @@ with tab1:
 
     # ─── Chart 2: Most dysfunctional categories ────────────────────
     st.markdown(
-        "<div style='margin-top: 2.5rem;'>"
+        "<div style='margin-top: 1.75rem;'>"
         "<div class='eyebrow'>Most dysfunctional categories</div>"
         "<h3 style='margin: 0.3rem 0 0 0;'>Asymmetry index, top 8</h3>"
         "<p style='color: var(--muted); margin: 0.4rem 0 1rem 0; font-size: 0.85rem;'>"
@@ -311,7 +320,7 @@ with tab1:
 
     # ─── Opportunities table ───────────────────────────────────────
     st.markdown(
-        "<div style='margin-top: 2.5rem;'>"
+        "<div style='margin-top: 1.75rem;'>"
         "<div class='eyebrow'>Top under-supply opportunities</div>"
         "<h3 style='margin: 0.3rem 0 0 0;'>Specific brand \u00b7 category \u00b7 size combinations</h3>"
         "<p style='color: var(--muted); margin: 0.4rem 0 1rem 0; font-size: 0.85rem;'>"
@@ -400,10 +409,11 @@ with tab1:
 # ────────────────────────────────────────────────────────────────────
 with tab2:
     why_matters(
-        "Products at deep discount with all variants still in stock for 30+ "
-        "days are dead stock \u2014 a design, fabric, or fit failure that's "
-        "eating warehouse space. Knowing what's dying across the market tells "
-        "you what to avoid producing or stocking."
+        "**What's stuck and not selling?** Products at deep discount with "
+        "all variants still in stock for 30+ days are dead stock \u2014 a "
+        "design, fabric, or fit failure that's eating warehouse space. "
+        "Knowing what's dying across the market tells you what to avoid "
+        "producing or stocking."
     )
     stub_block("Detailed view shipping in week 3 \u2014 see roadmap.")
 
@@ -413,9 +423,10 @@ with tab2:
 # ────────────────────────────────────────────────────────────────────
 with tab3:
     why_matters(
-        "When a brand stops restocking specific sizes (say, 38 and 40) while "
-        "continuing to replenish others, they're abandoning that size \u2014 "
-        "a silent customer-mix shift. Catching this early reveals where "
-        "competitors are moving their bets."
+        "**Which sizes are quietly being abandoned?** When a brand stops "
+        "restocking specific sizes (say, 38 and 40) while continuing to "
+        "replenish others, they're abandoning that size \u2014 a silent "
+        "customer-mix shift. Catching this early reveals where competitors "
+        "are moving their bets."
     )
     stub_block("Detailed view shipping in week 3 \u2014 see roadmap.")
